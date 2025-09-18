@@ -137,11 +137,11 @@ git branch -M main
 git remote add origin git@github.com:mohammadshakirsaifi/AmazonCognitoUserPools.git
 git push -u origin main
 ```
-🛠️ Troubleshooting
-<img width="1018" height="737" alt="image" src="https://github.com/mohammadshakirsaifi/AmazonCognitoUserPools/blob/Cloudformation/Troubleshooting.png" />
+## 🛠️ Troubleshooting
+![Troubleshooting](./Troubleshooting.png)
 
-🖼️ Architecture Diagram
-<img width="1018" height="737" alt="image" src="https://github.com/mohammadshakirsaifi/AmazonCognitoUserPools/blob/Cloudformation/Architecture%20Diagram.png" />
+## 📌 Architecture Diagram
+![Architecture](./Architecture Diagram.png)
 
     
     User[👤 User] -->|Login Request| Cognito[🟦 AWS Cognito Hosted UI]
