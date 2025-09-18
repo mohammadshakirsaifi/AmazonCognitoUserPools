@@ -32,30 +32,22 @@ Ensure the following tools and accounts are set up before deploying:
 
 Before running deployment, gather the following:
 
-OKTA_DOMAIN (e.g., dev-123456.okta.com)
-
-OKTA_API_TOKEN
-
-OktaClientId and OktaClientSecret (from okta-create-oidc.sh)
-
-CallbackURL and LogoutURL for your app
-
-CognitoDomainPrefix (must be unique for the Cognito Hosted UI)
+- `OKTA_DOMAIN` (e.g., `dev-123456.okta.com`)
+- `OKTA_API_TOKEN`
+- `OktaClientId` and `OktaClientSecret` (from `okta-create-oidc.sh`)
+- `CallbackURL` and `LogoutURL` for your app
+- `CognitoDomainPrefix` (must be unique for the Cognito Hosted UI)
 
 ### 🚀 Deployment Options
 ### Option 1: GitHub Actions (CI/CD)
 
-The provided GitHub Actions workflow (.github/workflows/deploy.yml) will automatically:
+The provided GitHub Actions workflow (`.github/workflows/deploy.yml`) will automatically:
 
-Initialize Terraform (terraform init)
-
-Validate configuration (terraform validate)
-
-Show plan (terraform plan)
-
-Apply configuration (terraform apply)
-
-Trigger: On every push to the repository.
+- Initialize Terraform (terraform init)
+- Validate configuration (terraform validate)
+- Show plan (terraform plan)
+- Apply configuration (terraform apply)
+- Trigger: On every push to the repository.
 
 ### Option 2: Local Deployment via Bash
 
@@ -67,11 +59,9 @@ chmod +x deploy.sh
 
 Steps:
 
-Update terraform.tfvars with your values.
-
-Run the script.
-
-Terraform will automatically initialize, validate, plan, and apply.
+- 1. Update terraform.tfvars with your values.
+- 2. Run the script.
+- 3. Terraform will automatically initialize, validate, plan, and apply.
 
 ### 🔄 Okta OIDC App Creation
 
@@ -111,5 +101,12 @@ You will be prompted:
 ⚠️  WARNING: This will destroy all Terraform-managed resources for Cognito-Okta integration!
 Are you sure you want to continue? (yes/no):
 ```
-
 Type yes to confirm. This helps avoid unnecessary cloud costs.
+
+### ✅ Summary
+### Step	                           Description
+`scripts/okta-create-oidc.sh`	   Creates Okta OIDC app
+`terraform.tfvars`	               Fill in with generated and required values
+`deploy.sh`	                       Deploys using Terraform locally
+GitHub Actions CI/CD	           Deploys automatically on push
+`destroy.sh`	                   Destroys all resources
