@@ -19,15 +19,30 @@ Choose the IaC tool you prefer and follow the respective setup instructions.
 ## 📂 Repository Structure
 
 ```bash
-.
-├── cloudformation/         # CloudFormation templates & guides
-├── amazon-cognito-user-pools-okta/ # Terraform configuration
-├── scripts/                # Shared Okta automation scripts
-├── .github/workflows/      # CI/CD pipelines
-├── diagram.png             # High-level architecture diagram
-└── README.md               # This file
-
-🛠️ Prerequisites
+cognito-okta-infra/
+├── cloudformation/
+│   ├── cognito-okta-full.yml
+│   └── README.md
+├── terraform/
+│   ├── main.tf
+│   ├── variables.tf
+│   ├── outputs.tf
+│   ├── scripts/
+│   │   ├── deploy.sh
+│   │   └── destroy.sh
+│   └── README.md
+├── okta-scripts/
+│   ├── okta-create-oidc.sh
+│   ├── okta-create-saml.sh
+├── .github/
+│   └── workflows/
+│       ├── terraform-ci.yml
+│       └── cloudformation-ci.yml
+├── diagram.png
+└── README.md
+```
+      
+### 🛠️ Prerequisites
 - Okta Org with Admin privileges
 - Okta API Token
 - AWS CLI configured with IAM rights to create Cognito resources
@@ -35,7 +50,7 @@ Choose the IaC tool you prefer and follow the respective setup instructions.
 Tools installed:
 - curl, jq, awscli, terraform (if using Terraform)
 
-🚦 Quick Start
+### 🚦 Quick Start
 - Option 1: Using CloudFormation
 Go to cloudformation/
 - Follow the step-by-step instructions
@@ -46,7 +61,7 @@ aws cloudformation deploy \
   --stack-name CognitoOktaStack \
   --capabilities CAPABILITY_NAMED_IAM
 ```
-- Option 2: Using Terraform
+### Option 2: Using Terraform
 - Go to amazon-cognito-user-pools-okta/
 - Copy terraform.tfvars.example → terraform.tfvars and update values
 
@@ -70,7 +85,7 @@ scripts/okta-create-saml.sh
 ```
  → Automates SAML IdP setup in Okta
 
-- ✅ Next Steps
+### ✅ Next Steps
 
 Test Cognito Hosted UI URL:
 ```
