@@ -59,9 +59,9 @@ chmod +x deploy.sh
 
 Steps:
 
-- 1. Update terraform.tfvars with your values.
-- 2. Run the script.
-- 3. Terraform will automatically initialize, validate, plan, and apply.
+1. Update terraform.tfvars with your values.
+2. Run the script.
+3. Terraform will automatically initialize, validate, plan, and apply.
 
 ### 🔄 Okta OIDC App Creation
 
