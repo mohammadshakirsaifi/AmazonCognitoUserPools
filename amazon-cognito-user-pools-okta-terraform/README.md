@@ -110,3 +110,14 @@ Type yes to confirm. This helps avoid unnecessary cloud costs.
 `deploy.sh`	                       Deploys using Terraform locally
 GitHub Actions CI/CD	           Deploys automatically on push
 `destroy.sh`	                   Destroys all resources
+
+### Summary
+
+### Step | Description
+--- | ---
+`scripts/okta-create-oidc.sh` | Creates Okta OIDC app  
+`terraform.tfvars` | Fill in with generated and required values  
+`deploy.sh` | Deploys using Terraform locally  
+GitHub Actions CI/CD | Deploys automatically on push  
+`destroy.sh` | Destroys all resources  
+
