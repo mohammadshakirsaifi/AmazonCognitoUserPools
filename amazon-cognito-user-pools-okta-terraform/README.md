@@ -113,11 +113,14 @@ GitHub Actions CI/CD	           Deploys automatically on push
 
 ### Summary
 
-### Step | Description
---- | ---
-`scripts/okta-create-oidc.sh` | Creates Okta OIDC app  
-`terraform.tfvars` | Fill in with generated and required values  
-`deploy.sh` | Deploys using Terraform locally  
-GitHub Actions CI/CD | Deploys automatically on push  
-`destroy.sh` | Destroys all resources  
+## 🚀 Deployment Steps Summary
+
+| 🛠️ Step | 📄 Description |
+|--------|----------------|
+| `scripts/okta-create-oidc.sh` | Creates Okta OIDC app |
+| `terraform.tfvars` | Fill in with generated and required values |
+| `deploy.sh` | Deploys using Terraform locally |
+| **GitHub Actions CI/CD** | Deploys automatically on push |
+| `destroy.sh` | Destroys all resources |
+
 
