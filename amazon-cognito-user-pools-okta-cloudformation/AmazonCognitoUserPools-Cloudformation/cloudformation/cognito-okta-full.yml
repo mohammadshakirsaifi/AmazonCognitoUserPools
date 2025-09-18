@@ -1,0 +1,99 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  OktaIssuerUrl:
+    Type: String
+    Description: "Okta issuer URL (openid-configuration Issuer), e.g. https://your-okta-domain.okta.com/oauth2/default"
+  OktaClientId:
+    Type: String
+    Description: "Okta App client ID"
+  OktaClientSecret:
+    Type: String
+    Description: "Okta App client secret"
+  CognitoDomainPrefix:
+    Type: String
+    Description: "Cognito hosted UI domain prefix"
+  CallbackURL:
+    Type: String
+    Description: "Callback URL to your app"
+  LogoutURL:
+    Type: String
+    Description: "Logout redirect URL"
+  UserPoolName:
+    Type: String
+    Default: "CognitoWithOktaUserPool"
+
+Resources:
+
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Ref UserPoolName
+      AliasAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      Schema:
+        - Name: email
+          Required: true
+          Mutable: true
+        - Name: given_name
+          Required: false
+          Mutable: true
+        - Name: family_name
+          Required: false
+          Mutable: true
+
+  CognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: "OktaAppClient"
+      UserPoolId: !Ref CognitoUserPool
+      GenerateSecret: true
+      SupportedIdentityProviders:
+        - COGNITO
+        - OktaOIDC
+      CallbackURLs:
+        - !Ref CallbackURL
+      LogoutURLs:
+        - !Ref LogoutURL
+      AllowedOAuthFlows:
+        - code
+      AllowedOAuthScopes:
+        - openid
+        - email
+        - profile
+      AllowedOAuthFlowsUserPoolClient: true
+
+  CognitoDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: !Ref CognitoDomainPrefix
+      UserPoolId: !Ref CognitoUserPool
+
+  OktaOIDCProvider:
+    Type: AWS::Cognito::UserPoolIdentityProvider
+    Properties:
+      ProviderName: "OktaOIDC"
+      UserPoolId: !Ref CognitoUserPool
+      ProviderType: OIDC
+      ProviderDetails:
+        client_id: !Ref OktaClientId
+        client_secret: !Ref OktaClientSecret
+        attributes_request_method: GET
+        oidc_issuer: !Ref OktaIssuerUrl
+      AttributeMapping:
+        email: email
+        given_name: given_name
+        family_name: family_name
+        username: email
+
+Outputs:
+  CognitoUserPoolId:
+    Description: "Cognito User Pool ID"
+    Value: !Ref CognitoUserPool
+  CognitoAppClientId:
+    Description: "Cognito App Client ID"
+    Value: !GetAtt CognitoUserPoolClient.ClientId
+  CognitoDomainURL:
+    Description: "Cognito Hosted UI domain"
+    Value: !Sub "https://${CognitoDomainPrefix}.auth.${AWS::Region}.amazoncognito.com"

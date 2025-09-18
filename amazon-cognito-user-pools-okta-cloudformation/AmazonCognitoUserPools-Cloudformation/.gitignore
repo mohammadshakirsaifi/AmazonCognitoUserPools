@@ -1,0 +1,13 @@
+# local env and outputs
+.env
+outputs/
+
+# OS
+.DS_Store
+
+# AWS / tools
+.aws/
+.terraform/
+
+# other
+node_modules/

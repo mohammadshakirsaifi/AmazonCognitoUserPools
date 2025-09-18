@@ -1,0 +1,58 @@
+name: Deploy Cognito-Okta Integration
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      STACK_NAME: CognitoOktaFullStack
+      TEMPLATE_FILE: cloudformation/cognito-okta-full.yml
+      AWS_REGION: us-east-1  # change if needed
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up environment
+        run: |
+          chmod +x scripts/*.sh
+          mkdir -p outputs
+
+      - name: Install jq
+        run: |
+          sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Run Okta OIDC creation script
+        env:
+          OKTA_DOMAIN: ${{ secrets.OKTA_DOMAIN }}
+          OKTA_API_TOKEN: ${{ secrets.OKTA_API_TOKEN }}
+        run: |
+          ./scripts/okta-create-oidc.sh
+          echo "Okta OIDC app created. Checking output..."
+          ls -l outputs
+          # Avoid printing sensitive fields
+
+      - name: Extract Okta Client details
+        id: okta
+        run: |
+          CLIENT_ID=$(jq -r '.credentials.oauthClient.client_id' outputs/okta_oidc.json)
+          CLIENT_SECRET=$(jq -r '.credentials.oauthClient.client_secret' outputs/okta_oidc.json)
+          echo "CLIENT_ID=$CLIENT_ID" >> $GITHUB_ENV
+          echo "CLIENT_SECRET=$CLIENT_SECRET" >> $GITHUB_ENV
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy CloudFormation stack
+        run: |
+          aws cloudformation deploy                     --template-file "${{ env.TEMPLATE_FILE }}"                     --stack-name "${{ env.STACK_NAME }}"                     --parameter-overrides                       OktaIssuerUrl="https://${{ secrets.OKTA_DOMAIN }}/oauth2/default"                       OktaClientId=$CLIENT_ID                       OktaClientSecret=$CLIENT_SECRET                       CognitoDomainPrefix=${{ secrets.COGNITO_DOMAIN_PREFIX }}                       CallbackURL=${{ secrets.CALLBACK_URL }}                       LogoutURL=${{ secrets.LOGOUT_URL }}                       UserPoolName=${{ secrets.USER_POOL_NAME }}                     --capabilities CAPABILITY_NAMED_IAM
