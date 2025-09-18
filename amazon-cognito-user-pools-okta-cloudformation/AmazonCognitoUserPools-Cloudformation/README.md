@@ -141,7 +141,7 @@ git push -u origin main
 ![Troubleshooting](./Troubleshooting.png)
 
 ## 📌 Architecture Diagram
-![Architecture](./Architecture Diagram.png)
+![Architecture](./ArchitectureDiagram.png)
 
     
     User[👤 User] -->|Login Request| Cognito[🟦 AWS Cognito Hosted UI]
