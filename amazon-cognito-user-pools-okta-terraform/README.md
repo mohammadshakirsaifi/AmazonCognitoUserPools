@@ -18,18 +18,15 @@ cognito-okta-terraform-complete/
 └── .github/
     └── workflows/
         └── deploy.yml         # GitHub Actions workflow
-```bash
+```
 ---
 ###  ✅ Prerequisites
 Ensure the following tools and accounts are set up before deploying:
 - ✅ Okta Organization with admin privileges
 - ✅ Okta API Token
-
-✅ AWS CLI installed and configured
-
-✅ Terraform ≥ 1.5.0 installed
-
-✅ jq installed (for JSON parsing in scripts)
+- ✅ AWS CLI installed and configured
+- ✅ Terraform ≥ 1.5.0 installed
+- ✅ jq installed (for JSON parsing in scripts)
 
 ### 🔑 Required Values
 
@@ -63,10 +60,10 @@ Trigger: On every push to the repository.
 ### Option 2: Local Deployment via Bash
 
 For local testing or development, use the deploy.sh script.
-
+```bash
 chmod +x deploy.sh
 ./deploy.sh
-
+```
 
 Steps:
 
@@ -79,41 +76,40 @@ Terraform will automatically initialize, validate, plan, and apply.
 ### 🔄 Okta OIDC App Creation
 
 Run the script to create an OIDC app in Okta:
-
+```bash
 scripts/okta-create-oidc.sh
-
+```
 
 It will output:
 
-client_id
+- `client_id`
+- `client_secret`
 
-client_secret
-
-Copy these into terraform.tfvars.
+Copy these into `terraform.tfvars`.
 
 ### 🧩 Login Flow Test
 
 After deployment, test login via the Cognito Hosted UI:
-
+```bash
 https://<CognitoDomainPrefix>.auth.<region>.amazoncognito.com/oauth2/authorize
   ?response_type=code
   &client_id=<CognitoAppClientId>
   &redirect_uri=<CallbackURL>
   &scope=openid+email+profile
   &identity_provider=OktaOIDC
-
+```
 ### 🗑️ Tear Down / Cleanup
 
 To clean up all created resources:
-
+```bash
 chmod +x destroy.sh
 ./destroy.sh
-
+```
 
 You will be prompted:
-
+```bash
 ⚠️  WARNING: This will destroy all Terraform-managed resources for Cognito-Okta integration!
 Are you sure you want to continue? (yes/no):
-
+```
 
 Type yes to confirm. This helps avoid unnecessary cloud costs.
